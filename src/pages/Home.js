@@ -11,6 +11,7 @@ function Home() {
   useEffect(() => {
     appwriteService.getPosts([]).then((posts) => {
       if (posts) {
+        console.log("the values in the post is ", posts);
         setPosts(posts.documents);
       }
     });

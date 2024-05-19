@@ -1,4 +1,4 @@
-import react, { useCallback } from "react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import Button from "../Button";
 import Input from "../Input";
@@ -7,10 +7,9 @@ import Select from "../Select";
 import appwriteSerice from "../../appwrite/config";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import React from "react";
 
 export default function PostForm({ post }) {
-  const { register, watch, handleSubmit, setValue, control, getValues } =
+  const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
       defaultValues: {
         tittle: post?.title || "",
@@ -19,8 +18,10 @@ export default function PostForm({ post }) {
         status: post?.status || "active",
       },
     });
+
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
+
   const submit = async (data) => {
     if (post) {
       const file = data.image[0]
@@ -42,9 +43,11 @@ export default function PostForm({ post }) {
       if (file) {
         const fileId = file.$id;
         data.featuredImage = fileId;
+        console.log(data.featuredImage);
+        const userId = userData.$id;
         const dbPost = await appwriteSerice.createPost({
           ...data,
-          userId: userData.$id,
+          userId,
         });
 
         if (dbPost) {
@@ -53,6 +56,7 @@ export default function PostForm({ post }) {
       }
     }
   };
+
   const slugTransform = useCallback((value) => {
     if (value && typeof value === "string")
       return value
@@ -67,15 +71,13 @@ export default function PostForm({ post }) {
       if (name === "title") {
         setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
-    }),
-      [watch, setValue, slugTransform];
-  });
-
+    });
+  }, [watch, slugTransform, setValue]);
   return (
     <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
       <div className="w-2/3 px-2">
         <Input
-          label="title"
+          label="Title"
           placeholder="Title"
           className="mb-4"
           {...register("title", { required: true })}

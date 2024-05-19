@@ -1,5 +1,5 @@
 import { Client, Databases, Storage, Query, ID } from "appwrite";
-import conf from "../cong/conf";
+import conf from "../conf/conf";
 
 export class Servicee {
   client = new Client();
@@ -14,7 +14,7 @@ export class Servicee {
   }
   async getPost(slug) {
     try {
-      return await this.databases.createDocument(
+      return await this.databases.getDocument(
         conf.appWriteDataBaseId,
         conf.appWriteCollectinId,
         slug
@@ -116,5 +116,5 @@ export class Servicee {
     return this.bucket.getFilePreview(conf.appwriteBucketId, fileId).href;
   }
 }
-const Servicee = new Servicee();
-export default Servicee;
+const servicee = new Servicee();
+export default servicee;

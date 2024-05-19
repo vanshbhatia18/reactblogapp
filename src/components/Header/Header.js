@@ -2,7 +2,7 @@ import React from "react";
 import Container from "../container/Container";
 import Logo from "../Logo";
 import { Link } from "react-router-dom";
-import LogOutButton from "./LogoutBtn";
+import LogOutButton from "./LogOutButton";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -36,6 +36,10 @@ function Header() {
       slug: "/add-post",
       active: authStatus,
     },
+    {
+      name: "Log Out",
+      active: authStatus,
+    },
   ];
 
   return (
@@ -60,11 +64,12 @@ function Header() {
                 </li>
               ) : null
             )}
-            {authStatus && (
+
+            {authStatus ? (
               <li>
                 <LogOutButton />
               </li>
-            )}
+            ) : null}
           </ul>
         </nav>
       </Container>
